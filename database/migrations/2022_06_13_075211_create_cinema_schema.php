@@ -36,7 +36,71 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
-        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
+
+        Schema::create('cinemas', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('location');
+            $table->timestamps();
+        });
+
+        Schema::create('screens', function($table) {
+            $table->increments('id');
+            $table->integer('cinema_id')->unsigned();
+            $table->foreign('cinema_id')->references('id')->on('cinemas')->onDelete('cascade');
+            $table->string('name'); //Screen Name S1, S3
+            $table->timestamps();
+        });
+
+        Schema::create('movies', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('description');
+            $table->string('genre');
+            $table->string('release_date');
+            $table->string('rating');
+            $table->string('poster_image');
+            $table->longText('cast'); //Can store serialized array or Json
+            $table->string('runtime');
+            $table->string('tags');
+            $table->timestamps();
+        });
+
+        Schema::create('shows', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->integer('screen_id')->unsigned();
+            $table->foreign('screen_id')->references('id')->on('screens');
+            $table->integer('movie_id')->unsigned();
+            $table->foreign('movie_id')->references('id')->on('movies');
+            $table->dateTime('start');
+            $table->dateTime('end');
+            $table->boolean('is_booking_available')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('seatingTypes', function($table) {
+            $table->increments('id');
+            $table->integer('screen_id')->unsigned();
+            $table->foreign('screen_id')->references('id')->on('screens');
+            $table->string('name');
+            $table->double('price');
+            $table->string('sitting_prefix'); //So that multiple type of sitting for same screen does not overlap
+            $table->integer('rows');
+            $table->integer('columns');
+            $table->timestamps();
+        });
+
+        Schema::create('seatBooking', function($table) {
+            $table->increments('id');
+            $table->integer('screen_id')->unsigned();
+            $table->foreign('screen_id')->references('id')->on('screens');
+            $table->string('customer_name');
+            $table->string('seat_numbers'); //Can be multiple comma seperated if booking for more than 1 person
+            $table->timestamps();
+        });
+
+//        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
     }
 
     /**
