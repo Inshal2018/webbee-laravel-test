@@ -10,7 +10,7 @@ use App\Models\Event;
 
 class Workshop extends Model
 {
-    function event(){
-
+    function future_event(){
+        return $this->hasOne(Event::class);
     }
 }

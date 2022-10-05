@@ -9,6 +9,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Date;
 use App\Models\Workshop;
+use Illuminate\Database\Eloquent\Builder;
 
 class EventsController extends BaseController
 {
@@ -105,6 +106,12 @@ class EventsController extends BaseController
         return Event::with('workshops')->get();
     }
 
+
+    public function getFutureEventsWithWorkshops() {
+        return Event::with('workshops')->whereHas('workshops',function (Builder $query) {
+            $query->where('start','>',date('Y-m-d H:M:S'));
+        })->get();
+    }
     /* TODO: complete getFutureEventWithWorkshops so that it returns events with workshops, that have not yet started
     Requirements:
     - only events that have not yet started should be included
@@ -178,7 +185,4 @@ class EventsController extends BaseController
     ```
      */
 
-    public function getFutureEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 2');
-    }
 }
