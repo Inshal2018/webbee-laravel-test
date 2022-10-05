@@ -8,12 +8,14 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Date;
+use App\Models\Workshop;
 
 class EventsController extends BaseController
 {
     public function getWarmupEvents() {
         return Event::all();
     }
+
 
     /* TODO: complete getEventsWithWorkshops so that it returns all events including the workshops
      Requirements:
@@ -99,11 +101,9 @@ class EventsController extends BaseController
         }
     ]
      */
-
     public function getEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 1');
+        return Event::with('workshops')->get();
     }
-
 
     /* TODO: complete getFutureEventWithWorkshops so that it returns events with workshops, that have not yet started
     Requirements:
