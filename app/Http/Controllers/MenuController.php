@@ -3,8 +3,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MenuItem;
 use Illuminate\Routing\Controller as BaseController;
+use App\Models\MenuItem;
 
 class MenuController extends BaseController
 {
@@ -93,6 +93,7 @@ class MenuController extends BaseController
      */
 
     public function getMenuItems() {
-        throw new \Exception('implement in coding task 3');
+        return MenuItem::with('child_items')->whereNull('parent_id')->get();
+//        throw new \Exception('implement in coding task 3');
     }
 }
